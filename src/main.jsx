@@ -11,6 +11,9 @@ const Input = ({ hint }) => {
     "Arak",
     "Mashhad",
     "Tabriz",
+    "Karaj",
+    "Tafresh",
+    "Sanandaj",
   ];
   const [suggestion, setSuggestion] = useState([]);
 
@@ -21,7 +24,7 @@ const Input = ({ hint }) => {
       return;
     }
     const searchedCity = cities.filter((city) =>
-      city.toLowerCase().city.includes(inputValue.toLowerCase()),
+      city.toLowerCase().startsWith(inputValue.toLowerCase()),
     );
     setSuggestion(searchedCity);
   };
@@ -32,7 +35,6 @@ const Input = ({ hint }) => {
       <input type="text" id="input" onChange={handleChange} />
       {suggestion.length > 0 && (
         <ul>
-          {" "}
           {suggestion.map((city, index) => (
             <li key={index}>{city}</li>
           ))}
