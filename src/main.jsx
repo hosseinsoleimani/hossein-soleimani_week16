@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 
 /* eslint-disable react/prop-types */
 const Input = ({ hint }) => {
@@ -27,7 +27,7 @@ const Input = ({ hint }) => {
         return {
           ...state,
           value: action.payload.value,
-          typedLength: action.payload.length,
+          typedLength: action.payload.typedLength,
           shouldSelect: action.payload.shouldSelect,
         };
       default:
@@ -35,31 +35,43 @@ const Input = ({ hint }) => {
     }
   }
 
-  const inputRef = useRef(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const inputRef = useRef(null);
 
   const handleChange = (event) => {
-    const inputValue = event.target.value.toLowerCase();
+    const inputValue = event.target.value;
+    const inputValueLower = inputValue.toLowerCase();
 
     const match = cities.find((city) =>
-      city.toLowerCase().startsWith(inputValue),
+      city.toLowerCase().startsWith(inputValueLower),
     );
 
-    if (match && inputValue.length < match.length) {
-      dispatch({
-        type: "SetTyped",
-        payload: {
-          value: match,
-          length: inputValue.length,
-          shouldSelect: true,
-        },
-      });
+    if (match) {
+      if (inputValue.length < match.length) {
+        dispatch({
+          type: "SetTyped",
+          payload: {
+            value: match,
+            typedLength: inputValue.length,
+            shouldSelect: true,
+          },
+        });
+      } else {
+        dispatch({
+          type: "SetTyped",
+          payload: {
+            value: inputValue,
+            typedLength: inputValue.length,
+            shouldSelect: false,
+          },
+        });
+      }
     } else {
       dispatch({
         type: "SetTyped",
         payload: {
           value: inputValue,
-          length: inputValue.length,
+          typedLength: inputValue.length,
           shouldSelect: false,
         },
       });
@@ -85,6 +97,7 @@ const Input = ({ hint }) => {
         value={state.value}
         id="input"
         onChange={handleChange}
+        autoComplete="off"
       />
     </div>
   );
