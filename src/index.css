@@ -9,6 +9,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body h2 {
+  text-align: center;
+}
+
 .input {
   position: relative;
   width: 250px;

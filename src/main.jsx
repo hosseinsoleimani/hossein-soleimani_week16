@@ -46,26 +46,15 @@ const Input = ({ hint }) => {
       city.toLowerCase().startsWith(inputValueLower),
     );
 
-    if (match) {
-      if (inputValue.length < match.length) {
-        dispatch({
-          type: "SetTyped",
-          payload: {
-            value: match,
-            typedLength: inputValue.length,
-            shouldSelect: true,
-          },
-        });
-      } else {
-        dispatch({
-          type: "SetTyped",
-          payload: {
-            value: inputValue,
-            typedLength: inputValue.length,
-            shouldSelect: false,
-          },
-        });
-      }
+    if (match && inputValue.length > state.typedLength) {
+      dispatch({
+        type: "SetTyped",
+        payload: {
+          value: match,
+          typedLength: inputValue.length,
+          shouldSelect: true,
+        },
+      });
     } else {
       dispatch({
         type: "SetTyped",
